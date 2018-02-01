@@ -9,17 +9,27 @@
 namespace app\api\model;
 
 
-class Banner
+use think\Db;
+use think\Model;
+
+class Banner extends BaseModel
 {
-    public static function getBannerByID($id){
-        //TODO:根据Banner ID号获得Banner信息
-//        try{
-//            1/0;
-//        }
-//        catch (Exception $ex){
-//            throw $ex;
-//        }
-//        return 'this is banner info';
-        return null;
+
+    protected $hidden = ['delete_time', 'update_time'];
+
+//  关联函数
+    public function items()
+    {
+        return $this->hasMany('BannerItem', 'banner_id', 'id');
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public static function getBannerByID($id)
+    {
+        $banner = self::with(['items', 'items.img'])->find($id);
+        return $banner;
     }
 }
