@@ -11,5 +11,7 @@ namespace app\api\model;
 
 class Product extends BaseModel
 {
-
+    protected $hidden = [
+        'delete_time'
+    ];
 }

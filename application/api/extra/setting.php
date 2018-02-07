@@ -6,5 +6,5 @@
  * Time: 16:39
  */
 return [
-    'img_prefix'=>'http://z.cn/images/'
+    'img_prefix'=>'http://z.cn/images'
 ];
