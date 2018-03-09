@@ -19,7 +19,7 @@ class OrderPlace extends BaseValidate
 
     protected $singleRule = [
         'product_id' => 'require|isPositiveInteger',
-        'count' => 'require|isPositiveInteger'
+        'count' => 'require|isPositiveInteger',
     ];
 
     protected function checkProducts($values)
@@ -29,21 +29,22 @@ class OrderPlace extends BaseValidate
                 'msg' => '商品列表为空'
             ]);
         }
-        if (is_array($values)) {
+        if (is_array(!$values)) {
             throw new ParameterExecption([
                 'msg' => '商品列表不能为空'
             ]);
         }
         foreach ($values as $value) {
-            $this->check($value);
+            $this->checkProduct($value);
         }
+        return true;
     }
 
     public function checkProduct($value)
     {
         $validate = new BaseValidate($this->singleRule);
-        $request = $validate->check($value);
-        if ($request){
+        $result = $validate->check($value);
+        if (!$result){
             throw new ParameterExecption([
                 'msg' => '商品列表参数错误'
             ]);

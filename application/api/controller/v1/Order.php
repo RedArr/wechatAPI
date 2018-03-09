@@ -15,6 +15,7 @@ use app\lib\enum\ScopeEnum;
 use app\lib\exception\ForbiddenException;
 use app\lib\exception\TokenException;
 use think\Controller;
+use \app\api\service\Order as orderService;
 use app\api\service\Token as TokenService;
 
 class order extends BaseController
@@ -22,10 +23,16 @@ class order extends BaseController
     protected $beforeActionList = [
         'checkExclusiveScope' => ['only' => 'placeOrder']
     ];
-    public function placeOrder(){
-        (new OrderPlace())->goCheck();
+
+    public function placeOrder()
+    {
+        (new OrderPlace())
+            ->goCheck();
         $products = input('post.products/a');
         $uid = TokenService::getCurrentUid();
+        $order = new orderService();
+        $status = $order->place($uid, $products);
+        return $status;
 
     }
 }
