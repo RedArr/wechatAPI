@@ -14,6 +14,7 @@ use app\api\model\Product;
 use app\api\model\UserAddress;
 use app\lib\exception\OrderException;
 use app\lib\exception\UserException;
+use think\Db;
 use think\Exception;
 
 class Order
@@ -47,11 +48,12 @@ class Order
 
     private function createOrder($snap)
     {
+        Db::startTrans();
         try {
             $orderNo = self::makeOrderNo();
             $order = new \app\api\model\Order();
             $order->user_id = $this->uid;
-            $order->total_price = $snap['totalCount'];
+            $order->total_price = $snap['orderPrice'];
             $order->order_no = $orderNo;
             $order->total_count = $snap['totalCount'];
             $order->snap_img = $snap['snapImg'];
@@ -69,6 +71,7 @@ class Order
             unset($val);
             $orderProduct = new OrderProduct();
             $orderProduct->saveAll($this->oProducts);
+            Db::commit();
             return [
                 'order_no' => $orderID,
                 'order_id' => $orderNo,
