@@ -73,8 +73,8 @@ class Order
             $orderProduct->saveAll($this->oProducts);
             Db::commit();
             return [
-                'order_no' => $orderID,
-                'order_id' => $orderNo,
+                'order_no' => $orderNo,
+                'order_id' => $orderID,
                 'order_time' => $create_time,
             ];
 
@@ -117,7 +117,7 @@ class Order
     private function getUserAddress()
     {
         $userAddress = UserAddress::where('user_id', '=', $this->uid)
-        ->find();
+            ->find();
         if (!$userAddress) {
             throw new UserException([
                 'msg' => '用户收货地址不存在，下单失败',
@@ -125,6 +125,17 @@ class Order
             ]);
         }
         return $userAddress->toArray();
+    }
+
+    //对外提供库存量检测
+    public function checkOrderStock($orderID)
+    {
+        $oProducts = OrderProduct::where('order_id', '=', $orderID)
+            ->select();
+        $this->oProducts = $oProducts;
+        $this->products = $this->getProductsByOrder($oProducts);
+        $status = $this->getOrderStatus();
+        return $status;
     }
 
 

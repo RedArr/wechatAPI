@@ -34,3 +34,10 @@ Route::post('api/:version/address', 'api/:version.Address/createOrUpdateAddress'
 Route::post('api/:version/test', 'api/:version.Address/test');
 
 Route::post('api/:version/order','api/:version.Order/placeOrder');
+//获取用户订单列表
+Route::get('api/:version/order/by_user','api/:version.Order/getSummaryOrderBySUser');
+Route::get('api/:version/order/:id','api/:version.Order/getDetail',[],['id'=>'\d+']);
+//支付
+Route::post('api/:version/pay/pre_order','api/:version.Pay/getPreOrder');
+
+Route::post('api/:version/pay/notify','api/:version.Pay/receiveNotify');

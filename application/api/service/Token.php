@@ -88,4 +88,16 @@ class Token
         }
 
     }
+
+    public static function isValidOperate($checkUID)
+    {
+        if (!$checkUID){
+            throw new Exception('检测UID必须传入一个UID');
+        }
+        $currentOperateUID = self::getCurrentUid();
+        if ($currentOperateUID == $checkUID){
+            return true;
+        }
+        return false;
+    }
 }
